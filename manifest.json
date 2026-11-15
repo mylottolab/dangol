@@ -1,0 +1,16 @@
+{
+  "name": "단골창구",
+  "short_name": "단골창구",
+  "description": "우리 가게 문의 창구 — 사진과 소개만 올리면 바로 열립니다",
+  "start_url": "/dangol_owner.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F2F5F4",
+  "theme_color": "#123F3D",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon_192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon_512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon_512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

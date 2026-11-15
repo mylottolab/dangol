@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>로그인 — 단골창구</title>
+<meta name="theme-color" content="#123F3D">
+<link rel="icon" href="icon_192.png"><link rel="stylesheet" href="dg.css?v=20261115">
+<!-- 🏪 2026-11-15 단골창구 로그인 · 가입 — 가림콜과 같은 계정(닉네임 + 비밀번호, 가림 서버).
+     닉네임이 처음이면 새 계정, 있으면 같은 비밀번호로 로그인합니다(가림콜 aliascall_my_account.html 과 같은 원리).
+     전화번호 · 이메일 · 사업자등록증을 받지 않습니다. 끝나면 ?next= 또는 사장님 화면으로. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div class="w">
+  <div class="top"><a class="logo" href="./"><img src="icon_192.png" alt="">단골창구</a></div>
+  <section class="card">
+    <b class="h">사장님 로그인 · 가입</b>
+    <p>처음이시면 <b>쓰고 싶은 닉네임과 비밀번호</b>를 정해 주세요. 그대로 계정이 만들어져요. 전화번호 · 이메일은 받지 않아요.</p>
+    <form id="f" style="display:flex;flex-direction:column;gap:10px" autocomplete="on">
+      <label for="nick">닉네임 (한글 · 영문 · 숫자)</label>
+      <input id="nick" autocomplete="username" maxlength="20" placeholder="예) 행복칼국수">
+      <label for="pw">비밀번호 (6자 이상)</label>
+      <input id="pw" type="password" autocomplete="current-password" minlength="6">
+      <div class="err" id="err" hidden></div>
+      <button class="btn" id="go" type="submit">로그인 · 가입하기</button>
+    </form>
+    <p style="font-size:13px">⚠ 비밀번호를 잊으면 찾을 수 없어요(전화번호를 받지 않기 때문). 꼭 기억해 두세요.<br>가림콜을 쓰신다면 같은 닉네임 · 비밀번호로 들어오실 수 있어요.</p>
+  </section>
+  <p class="foot"><a href="terms.html">이용약관</a> · <a href="privacy.html">개인정보처리방침</a></p>
+</div>
+<script>
+(function(){
+  var sb = window.supabase.createClient('https://qmwaraittiurkynszjts.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y');
+  var Q = new URLSearchParams(location.search);
+  var next = /^[a-z_]+\.html(\?[\w=&%-]*)?$/i.test(Q.get('next') || '') ? Q.get('next') : 'dangol_owner.html';
+  var $ = function(id){ return document.getElementById(id); };
+  function toEmail(n){ return encodeURIComponent(n.trim().toLowerCase().replace(/[^a-z0-9가-힣]/g, '')) + '@guest.aliascall.internal'; }
+  function bad(t){ $('err').textContent = t; $('err').hidden = !t; }
+  sb.auth.getSession().then(function(r){ var s = r.data.session; if (s && s.user && !s.user.is_anonymous) location.replace(next); });
+  $('f').addEventListener('submit', async function(e){
+    e.preventDefault(); bad('');
+    var nick = $('nick').value.trim(), pw = $('pw').value;
+    if (!nick.replace(/[^a-zA-Z0-9가-힣]/g, '')) return bad('닉네임을 한글 · 영문 · 숫자로 넣어 주세요.');
+    if (pw.length < 6) return bad('비밀번호는 6자 이상이에요.');
+    var b = $('go'); b.disabled = true; b.textContent = '잠시만요…';
+    try {
+      var email = toEmail(nick);
+      var up = await sb.auth.signUp({ email: email, password: pw, options: { data: { app: 'dangol' } } });
+      if (!up.error) {
+        if (up.data && up.data.user) { try { await sb.from('profiles').insert({ id: up.data.user.id, nickname: nick, country_code: 'KR', preferred_lang: 'ko', is_guest: true }); } catch (x) {} }
+      } else if (/already (registered|exists)/i.test(up.error.message || '')) {
+        var li = await sb.auth.signInWithPassword({ email: email, password: pw });
+        if (li.error) { bad('이미 있는 닉네임이에요. 비밀번호가 맞지 않아요.'); b.disabled = false; b.textContent = '로그인 · 가입하기'; return; }
+      } else { throw up.error; }
+      location.replace(next);
+    } catch (x) {
+      bad('잠시 문제가 있었어요: ' + (x.message || x)); b.disabled = false; b.textContent = '로그인 · 가입하기';
+    }
+  });
+})();
+</script>
+</body>
+</html>

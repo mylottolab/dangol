@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>계정 삭제 — 단골창구</title>
+<meta name="theme-color" content="#123F3D">
+<link rel="icon" href="icon_192.png"><link rel="stylesheet" href="dg.css?v=20261115">
+<!-- 🏪 2026-11-15 단골창구 계정 삭제 (구글 플레이 「계정 삭제 URL」). 가림 서버 self-delete-account 함수(가림콜과 같음). -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div class="w">
+  <div class="top"><a class="logo" href="./"><img src="icon_192.png" alt="">단골창구</a></div>
+  <section class="card">
+    <b class="h">계정 삭제</b>
+    <p>계정을 지우면 <b>내 단골창구 · 손님과의 대화 · 남은 기간</b>이 모두 지워지고 되돌릴 수 없습니다. 결제 기록은 법에 따라 5년 보관됩니다.</p>
+    <p>⚠ 가림콜과 같은 계정이라, 가림콜에서 쓰시던 것도 함께 지워집니다.</p>
+    <div id="out"><p>확인 중…</p></div>
+    <div class="err" id="err" hidden></div>
+    <p style="font-size:13px">로그인이 안 되면 weapps.kr@gmail.com 으로 닉네임과 함께 삭제를 요청해 주세요. 7일 안에 처리합니다.</p>
+  </section>
+</div>
+<script>
+(async function(){
+  var URL0 = 'https://qmwaraittiurkynszjts.supabase.co';
+  var sb = window.supabase.createClient(URL0, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y');
+  var $ = function(id){ return document.getElementById(id); };
+  var s = (await sb.auth.getSession()).data.session;
+  if (!s) { $('out').innerHTML = '<a class="btn" href="login.html?next=delete.html">먼저 로그인하기</a>'; return; }
+  $('out').innerHTML = '<label style="display:flex;gap:8px;align-items:flex-start;font-weight:700;color:var(--ink)"><input type="checkbox" id="ok" style="width:auto;margin-top:5px"> 위 내용을 확인했고, 계정을 지웁니다.</label>' +
+    '<button class="btn c" id="go" type="button" disabled style="margin-top:10px">계정 지우기</button>';
+  $('ok').onchange = function(){ $('go').disabled = !this.checked; };
+  $('go').onclick = async function(){
+    this.disabled = true; this.textContent = '지우는 중…';
+    try {
+      var r = await fetch(URL0 + '/functions/v1/self-delete-account', { method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + s.access_token }, body: JSON.stringify({ reason: 'dangol' }) });
+      var d = {}; try { d = await r.json(); } catch (x) {}
+      if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+      await sb.auth.signOut();
+      $('out').innerHTML = '<p><b>계정을 지웠습니다.</b> 그동안 단골창구를 써 주셔서 고맙습니다.</p>';
+    } catch (e) { $('err').textContent = '지우지 못했어요: ' + (e.message || e); $('err').hidden = false; this.disabled = false; this.textContent = '계정 지우기'; }
+  };
+})();
+</script>
+</body>
+</html>
