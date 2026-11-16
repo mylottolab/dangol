@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>/* 🌗 주야간 */try{var _t=localStorage.getItem("dg_theme");if(_t==="dark"||_t==="light")document.documentElement.setAttribute("data-theme",_t);}catch(e){}</script>
 <title>단골창구 — 우리 가게 문의 창구</title>
 <meta name="description" content="사업자등록증 없이, 가게 사진과 소개만 올리면 바로 여는 우리 가게 문의 창구. 손님은 QR만 찍으면 번호 없이 사장님께 묻습니다.">
 <meta name="theme-color" content="#123F3D">
@@ -40,5 +41,19 @@
     경기도 수원시 권선구 수성로47 10동 501호 · weapps.kr@gmail.com
   </p>
 </div>
+<script>/* 🌗 주야간 바꾸기 단추 (2026-11-16) — 고른 값은 이 휴대폰에만 기억합니다 */
+(function(){ var R = document.documentElement;
+  function dark(){ var t = R.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
+  var b = document.createElement('button'); b.type = 'button'; b.id = 'dgTheme';
+  b.style.cssText = 'flex:none;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line,#DCE3DE);background:var(--card,#fff);color:var(--ink,#12302E);font-size:18px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)';
+  function paint(){ var d = dark(); b.textContent = d ? '☀️' : '🌙'; b.title = b.ariaLabel = d ? '주간 모드로' : '야간 모드로'; }
+  b.onclick = function(){ var t = dark() ? 'light' : 'dark'; R.setAttribute('data-theme', t); try { localStorage.setItem('dg_theme', t); } catch (e) {} paint(); };
+  paint(); var top = document.querySelector('.top');
+  if (top) { b.style.marginLeft = 'auto'; top.appendChild(b); }
+  else { var bar = document.createElement('div');   /* 위쪽 띠가 없는 화면: 맨 위 오른쪽에 한 줄 */
+    bar.style.cssText = 'max-width:640px;margin:0 auto -6px;padding:max(10px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));display:flex;justify-content:flex-end';
+    b.style.width = b.style.height = '34px'; b.style.fontSize = '16px'; bar.appendChild(b); document.body.insertBefore(bar, document.body.firstChild); }
+})();
+</script>
 </body>
 </html>
