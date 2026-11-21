@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>단골창구 전체 기능 소개</title>
+<style>
+:root{--acc:#1F6F6B;--bg:#f5f7f7;--card:#fff;--fg:#1d2a2b;--mut:#5f7473;--line:#e1e9e8;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1716;--card:#18221f;--fg:#e6efed;--mut:#9fb1ae;--line:#2a3734;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;line-height:1.55;-webkit-text-size-adjust:100%}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;background:var(--acc);color:#fff}
+.top button{background:rgba(255,255,255,.18);border:0;color:#fff;font-size:18px;width:38px;height:38px;border-radius:10px}
+.top b{font-size:17px;flex:1}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 28px)}
+h1{margin:4px 0 2px;font-size:28px}
+h1 small{font-size:14px;color:var(--mut);font-weight:500;margin-left:8px}
+.lead{background:var(--card);border-left:4px solid var(--acc);border-radius:0 12px 12px 0;padding:12px 14px;margin:12px 0}
+.dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;background:var(--acc);color:#fff;font-weight:800;font-size:16px;text-decoration:none;margin:6px 0 4px}
+.dl-n{font-size:12.5px;color:var(--mut);text-align:center;margin:0 0 14px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px}
+.toc a{font-size:13px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--fg);text-decoration:none}
+section{background:var(--card);border-radius:14px;padding:4px 14px 6px;margin:14px 0;scroll-margin-top:70px}
+h2{font-size:17px;color:var(--acc);margin:12px 0 4px;display:flex;align-items:center;gap:8px}
+h2 small{font-size:11.5px;color:var(--mut);font-weight:600;background:var(--bg);border-radius:999px;padding:1px 8px}
+.it{padding:10px 0;border-top:1px solid var(--line)}
+.it:first-of-type{border-top:0}
+.it b{display:block;font-size:15px}
+.it p{margin:2px 0 0;font-size:14px;color:var(--mut)}
+.foot{font-size:12px;color:var(--mut);text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="top"><button type="button" onclick="history.length>1?history.back():location.href='index.html'" aria-label="뒤로">‹</button><b>전체 기능 소개</b></div>
+<div class="wrap">
+<h1>단골창구<small>dangol.org</small></h1>
+<p class="lead">작은 가게의 문의 창구입니다. 사장님은 사업자등록증·전화번호 없이 가게 사진과 소개만 올려 열고, 손님은 계산대 QR만 찍어 앱 없이 묻습니다. 가림콜 계정으로 열 수 있고, 부름·바로너·가림콜·바로카 앱 안에서도 손님 화면을 쓸 수 있습니다.</p>
+<a class="dl" href="https://wafa.kr/features/dangol_features.pdf" target="_blank" rel="noopener" onclick="if(window.Capacitor){location.href=this.href;return false}">⬇ PDF로 내려받기</a>
+<p class="dl-n">앱에서는 브라우저가 열리며 PDF를 보여 드려요. 그 화면에서 저장 · 공유하세요.</p>
+<nav class="toc"><a href="#s0">사장님</a><a href="#s1">손님</a><a href="#s2">요금 · 기타</a></nav>
+<section id="s0"><h2>사장님<small>13</small></h2><div class="it"><b>로그인 · 가입</b><p>닉네임과 비밀번호(6자 이상)만, 가림콜 계정과 같음</p></div><div class="it"><b>우리 가게 단골창구 열기</b><p>가게 이름·업종(음식점·카페·미용·학원·병원·상점 등)·사진·소개, 한 계정에 가게 3곳까지</p></div><div class="it"><b>가게 주소</b><p>우편번호 서비스로 주소 찾기, 상세 주소, 손님이 내비·지도로 찾아오기</p></div><div class="it"><b>자주 묻는 질문</b><p>영업시간·주차·예약을 적어 두면 손님 화면에서 먼저 답</p></div><div class="it"><b>공지 한 줄 · 지금 바쁨</b><p>손님 화면 위에 띄우는 안내</p></div><div class="it"><b>영업시간 밖 자동 안내</b><p>여는 시각·닫는 시각을 넣으면 그 밖의 문의에 자동 안내</p></div><div class="it"><b>손님 문의 답장</b><p>새 문의가 오면 휴대폰 알림, 답장 2,000자까지</p></div><div class="it"><b>번역 도움</b><p>외국어 문의는 파파고 번역으로 읽고 답하기</p></div><div class="it"><b>사진 · 동영상 주고받기</b><p>실용형부터</p></div><div class="it"><b>번호 없는 음성·영상 통화</b><p>실용형·프리미엄형</p></div><div class="it"><b>우리 가게 갤러리</b><p>신상·메뉴 사진을 블록처럼 올려 손님 화면에 보여 주기</p></div><div class="it"><b>QR 포스터</b><p>계산대·출입문에 붙이는 A4 포스터 인쇄, 휴대폰은 PDF로 저장, 주소 복사</p></div><div class="it"><b>확인됨 표시</b><p>따로 확인을 받은 가게에 「✅ 확인됨」</p></div></section><section id="s1"><h2>손님<small>7</small></h2><div class="it"><b>QR로 묻기</b><p>휴대폰 카메라로 QR만 찍으면 그 가게 창구, 가입·앱 설치 없음</p></div><div class="it"><b>가게 코드로 찾기</b><p>코드를 넣어 가게 찾기</p></div><div class="it"><b>가게 소개 · 자주 묻는 질문</b><p>사장님이 적은 소개와 답 먼저 보기</p></div><div class="it"><b>사장님께 묻기 · 답장 보기</b><p>번호 없이 문의하고 답장 확인, 내가 물어본 가게 목록</p></div><div class="it"><b>영어 화면</b><p>휴대폰 언어가 한국어가 아니면 영어로 (EN/한 단추)</p></div><div class="it"><b>금융 사기 주의 안내</b><p>계좌번호·링크가 나오면 경고, 링크는 누를 수 없게 글자로만</p></div><div class="it"><b>신고하기</b><p>이상한 가게 신고, 운영자가 확인해 멈출 수 있음</p></div></section><section id="s2"><h2>요금 · 기타<small>5</small></h2><div class="it"><b>요금제</b><p>기본형 · 실용형 · 프리미엄형 (1년), 처음 30일 무료, 자동 결제 없음</p></div><div class="it"><b>추가 구입</b><p>이번 달 사용량에 더하기</p></div><div class="it"><b>주간 · 야간 모드</b><p>화면 밝기 바꾸기</p></div><div class="it"><b>계정 삭제</b><p>앱 안에서 계정 지우기</p></div><div class="it"><b>다른 앱에서 열기</b><p>가림콜 「내 계정 → 🏪 단골창구」에서도 열고 관리</p></div></section>
+<a class="dl" href="https://wafa.kr/features/dangol_features.pdf" target="_blank" rel="noopener" onclick="if(window.Capacitor){location.href=this.href;return false}">⬇ PDF로 내려받기</a>
+<p class="foot">2026년 11월 21일 기준 · 화면과 기능은 앱 업데이트에 따라 바뀔 수 있습니다.<br>위브앱솔루션 · weapps.kr@gmail.com</p>
+</div>
+</body>
+</html>
