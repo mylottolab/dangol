@@ -26,7 +26,7 @@
     b.style.cssText = 'flex:none;height:38px;min-width:38px;padding:0 11px;border-radius:999px;border:1.5px solid var(--line,#DCE3DE);background:var(--card,#fff);color:var(--ink,#12302E);font:inherit;font-size:13.5px;font-weight:800;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)';
     b.onclick = I.toggle;
     var th = host.querySelector('#dgTheme');
-    if (th) { host.insertBefore(b, th); b.style.marginLeft = th.style.marginLeft || 'auto'; th.style.marginLeft = '6px'; if (th.style.height) b.style.height = th.style.height; }
+    if (th) { th.parentNode.insertBefore(b, th); b.style.marginLeft = th.style.marginLeft || 'auto'; th.style.marginLeft = '6px'; if (th.style.height) b.style.height = th.style.height; }
     else { b.style.marginLeft = 'auto'; host.appendChild(b); }
   }
 
@@ -496,7 +496,23 @@
     ["사진을 올리는 중…", "Uploading photo…"],
     ["사진을 올렸어요. [저장하기]를 눌러 주세요.", "Photo uploaded. Tap [Save]."],
     ["저장했어요. 자주 묻는 질문", "Saved. FAQ:"],
-    ["개가 손님 화면에 보여요.", " shown to customers."]
+    ["개가 손님 화면에 보여요.", " shown to customers."],
+    ["🏪 새 첫 화면", "🏪 New first screen"],
+    ["두 갈래 첫 화면", "Two-way first screen"],
+    ["[🙋 가게에 물어보기] · [🧑‍🍳 우리 가게] 두 칸, 손님과 사장님이 할 일을 바로", "Two tabs — [🙋 Ask a shop] · [🧑‍🍳 My shop] — so customers and owners see what to do right away"],
+    ["손님: 가게 찾기", "Customers: find a shop"],
+    ["가게 이름이나 포스터의 6자리 코드로 찾기, 「내가 물어본 가게」와 답장 온 가게 표시", "Search by shop name or the 6-digit poster code; “Shops I asked” shows which ones replied"],
+    ["사장님: 가게 간판 카드", "Owners: shop sign cards"],
+    ["가게마다 새 문의 · 기다리는 대화 수, 문의함 · 가게 꾸미기 · QR 포스터 세 칸", "New and waiting inquiries per shop, with Inbox · Edit shop · QR poster"],
+    ["처음 설정 3단계", "3-step setup"],
+    ["가게 사진·소개 → QR 포스터 붙이기 → 시험 문의 보내 보기", "Shop photo and intro → put up the QR poster → send a test inquiry"],
+    ["‹ 뒤로 · 🏠 처음으로", "‹ Back · 🏠 Home"],
+    ["손님 화면 · QR 포스터 · 로그인 · 약관 화면에서 첫 화면으로 돌아오기", "Return to the first screen from the customer page, QR poster, sign-in and terms"],
+    ["예전 첫 화면으로", "Old first screen"],
+    ["아래 「↩ 예전 첫 화면으로」로 언제든 돌아가기", "Go back anytime with “↩ Back to the old first screen” at the bottom"],
+    ["사장님 화면 영어", "Owner screens in English"],
+    ["첫 화면 · 사장님 화면 · 로그인 · 기능 소개도 [EN] 단추로 영어 (손님이 쓴 글은 그대로)", "The first screen, owner screens, sign-in and features switch to English with [EN] (customer messages stay as written)"],
+    ["2026년 11월 22일 기준 · 화면과 기능은 앱 업데이트에 따라 바뀔 수 있습니다.", "As of Nov 22, 2026 · screens and features may change with app updates."]
   ];
   D.sort(function(a, b){ return b[0].length - a[0].length; });
   var HAS = /[가-힣]/;
@@ -507,9 +523,11 @@
   ];
   /* 한 줄을 통째로 바꿀 수 있을 때만 바꿉니다(손님 · 사장님이 쓴 글은 그대로 두려고) */
   var X = {"일": "Sun", "월": "Mon", "화": "Tue", "수": "Wed", "목": "Thu", "금": "Fri", "토": "Sat", "답함": "Replied", "소개": "Intro", "건": "", "장": "", "분": "min", "이 사진": "This photo"};
+  var RE = ([]).map(function(a){ return [new RegExp(a[0]), a[1]]; });
   function tr(s){
     if (!s || !HAS.test(s)) return s;
     var k = s.trim(); if (X[k]) return s.replace(k, X[k]);
+    for (var q = 0; q < RE.length; q++) if (RE[q][0].test(k)) return s.replace(k, k.replace(RE[q][0], RE[q][1]));
     var o = s;
     for (var i = 0; i < D.length; i++) if (o.indexOf(D[i][0]) >= 0) o = o.split(D[i][0]).join(D[i][1]);
     for (var j = 0; j < R.length; j++) o = o.replace(R[j][0], R[j][1]);
