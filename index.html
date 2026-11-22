@@ -12,7 +12,7 @@
      ?c=가게코드 로 오면(포스터 QR) 바로 그 가게 손님 화면(dangol.html?c=)으로 보냅니다.
      서버 · 표는 가림콜과 같습니다(가림 서버 9_dangol_desk.sql · 10_dangol_pay.sql). -->
 <script>(function(){ var q = new URLSearchParams(location.search), c = q.get('c'); if (c) location.replace('dangol.html?c=' + encodeURIComponent(c)); })();</script>
-<script src="dangol_home_mode.js?v=20261122a"></script>
+<script src="dangol_home_mode.js?v=20261122b"></script>
 <script>/* 🏪 2026-11-22 새 첫 화면(시안) — 스위치가 'new' 이면 home.html 로(?c= 가게 코드는 위에서 이미 손님 화면으로) */
 try { if (window.DANGOL_HOME === 'new' && !/[?&]c=/.test(location.search)) location.replace('home.html'); } catch (e) {}</script>
 <link rel="stylesheet" href="dg.css?v=20261116">
