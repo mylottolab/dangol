@@ -79,7 +79,8 @@ var sb = window.sb = window.supabase.createClient(URL0, KEY0);   // aliascall_pu
 var A = document.getElementById('app'), Q = new URLSearchParams(location.search);
 var DGHOST = /(^|\.)dangol\.org$/.test(location.hostname);   // 🏪 단골창구 독립 사이트 · 앱(dangol.org) — 같은 파일을 aliascall.com 과 함께 씁니다
 var BRAND = DGHOST ? '단골창구' : '가림콜';
-var ME = null, DESKS = [], DK = null, TAB = Q.get('t') ? 'inbox' : 'inbox', THS = [], CUR = Q.get('t'), poll = null, FAQ = null;
+/* 🏪 2026-11-22 새 첫 화면에서 ?tab=set(가게 꾸미기) · gal 로 바로 */
+var ME = null, DESKS = [], DK = null, TAB = ['inbox', 'gal', 'set'].indexOf(Q.get('tab')) >= 0 && !Q.get('t') ? Q.get('tab') : 'inbox', THS = [], CUR = Q.get('t'), poll = null, FAQ = null;
 var CATS = ['음식점', '카페 · 디저트', '미용 · 뷰티', '학원 · 교육', '병원 · 약국', '상점', '생활 서비스', '숙박', '기타'];
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
@@ -104,7 +105,7 @@ async function boot(){
     return;
   }
   try { DESKS = await rpc('dg_owner_desks'); } catch (e) { A.innerHTML = shell('') + '<div class="card"><b class="h">' + esc(em(e)) + '</b></div>'; return; }
-  if (!DESKS.length) return openForm();
+  if (!DESKS.length || (Q.get('new') === '1' && DESKS.length < 3)) return openForm();   // 🏪 2026-11-22 새 첫 화면 [가게 한 곳 더 열기]
   DK = null; var wp = Q.get('webpaid'), pk = null; try { pk = localStorage.getItem(PAYK); } catch (e) {}
   b0: if (wp !== null && /dangol/.test(Q.get('sku') || SKU)) {   // 💳 웹 결제창에서 돌아옴 (기본형 · 실용형 · 프리미엄형)
     try { history.replaceState(null, '', location.pathname); } catch (e) {}
@@ -151,7 +152,7 @@ function addrWire(p, regionId){
 /* ── 처음 열기 ─────────────────────────────────────────── */
 function openForm(){
   A.innerHTML = shell('사진과 소개만 올리면 바로 열립니다. 사업자등록증은 필요 없어요.') +
-    '<div class="card" style="background:var(--warnbg);border-color:transparent"><p style="color:var(--warn)">🔎 <b>이미 단골창구를 여셨나요?</b> 지금 로그인한 계정(맨 아래 닉네임)에는 열린 가게가 없어요. 다른 닉네임으로 여셨다면 맨 아래 [로그아웃] 뒤 그 닉네임으로 들어오세요.' + (DGHOST ? '' : ' 가림콜 · dangol.org 는 같은 계정을 씁니다.') + '</p></div>' +
+    (DESKS.length ? '' : '<div class="card" style="background:var(--warnbg);border-color:transparent"><p style="color:var(--warn)">🔎 <b>이미 단골창구를 여셨나요?</b> 지금 로그인한 계정(맨 아래 닉네임)에는 열린 가게가 없어요. 다른 닉네임으로 여셨다면 맨 아래 [로그아웃] 뒤 그 닉네임으로 들어오세요.' + (DGHOST ? '' : ' 가림콜 · dangol.org 는 같은 계정을 씁니다.') + '</p></div>') +
     '<div class="card"><b class="h">우리 가게 단골창구 열기</b>' +
     '<p>손님이 가게 QR을 찍으면 이 가게 화면이 열리고, 자주 묻는 질문이 먼저 답하고, 그래도 궁금하면 사장님께 묻습니다. <b>사장님 전화번호는 손님에게 보이지 않아요.</b></p>' +
     '<label>가게 이름 *</label><input id="fn" maxlength="30" placeholder="예) 행복칼국수">' +

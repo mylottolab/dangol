@@ -12,6 +12,9 @@
      ?c=가게코드 로 오면(포스터 QR) 바로 그 가게 손님 화면(dangol.html?c=)으로 보냅니다.
      서버 · 표는 가림콜과 같습니다(가림 서버 9_dangol_desk.sql · 10_dangol_pay.sql). -->
 <script>(function(){ var q = new URLSearchParams(location.search), c = q.get('c'); if (c) location.replace('dangol.html?c=' + encodeURIComponent(c)); })();</script>
+<script src="dangol_home_mode.js?v=20261122a"></script>
+<script>/* 🏪 2026-11-22 새 첫 화면(시안) — 스위치가 'new' 이면 home.html 로(?c= 가게 코드는 위에서 이미 손님 화면으로) */
+try { if (window.DANGOL_HOME === 'new' && !/[?&]c=/.test(location.search)) location.replace('home.html'); } catch (e) {}</script>
 <link rel="stylesheet" href="dg.css?v=20261116">
 <style>
 .pick{ display:flex; flex-direction:column; gap:14px; flex:1; justify-content:center; min-height:60vh; }
@@ -35,12 +38,15 @@
     <a class="choice boss" href="boss.html"><span class="ic">🧑‍🍳</span><div><b>사장님</b><span>우리 가게 단골창구 열기 · 답장하기</span></div><span class="ar">›</span></a>
     <a class="choice guest" href="dangol.html"><span class="ic">🙋</span><div><b>고객님</b><span>가게에 물어보기 · 답장 보기</span></div><span class="ar">›</span></a>
   </div>
+  <button type="button" id="toNew" style="background:none;border:0;color:var(--sub);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:8px;align-self:center">🏪 새 첫 화면으로 보기</button>
   <p class="foot">
     <a href="features.html">📘 전체 기능 소개</a> · <a href="terms.html">이용약관</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="delete.html">계정 삭제</a><br>
     위브앱솔루션 · 대표 이미화 · 사업자등록번호 206-08-71754 · 통신판매업신고 2022-수원권선-1701<br>
     경기도 수원시 권선구 수성로47 10동 501호 · weapps.kr@gmail.com
   </p>
 </div>
+<script>document.getElementById('toNew').hidden = (window.DANGOL_HOME_ALL || 'classic') !== 'new';   /* 새 화면이 기본일 때만(예전 화면을 고른 분이 다시 돌아가는 길) */
+document.getElementById('toNew').onclick = function(){ try { localStorage.setItem('dangol_home_mode', 'new'); } catch (e) {} location.replace('home.html'); };</script>
 <script>/* 🌗 주야간 바꾸기 단추 (2026-11-16) — 고른 값은 이 휴대폰에만 기억합니다 */
 (function(){ var R = document.documentElement;
   function dark(){ var t = R.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }

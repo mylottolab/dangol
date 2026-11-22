@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>단골창구</title>
+<meta name="theme-color" content="#123F3D">
+<link rel="icon" href="icon_192.png"><link rel="apple-touch-icon" href="icon_192.png"><link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="dg.css?v=20261116">
+<script>try { var t0 = localStorage.getItem('dg_theme'); if (t0) document.documentElement.setAttribute('data-theme', t0); } catch (e) {}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+/* 🏪 단골창구 새 첫 화면 시안 (2026-11-22) — 시그니처 = 가게 차양(줄무늬 천막)과 창구
+   ① 맨 위 「지금 할 일」: 사장님 = 답 안 한 문의 · 손님 = 답장 온 가게
+   ② 두 갈래(창구 두 칸): [🙋 가게에 물어보기] / [🧑‍🍳 우리 가게]
+   ③ 우리 가게: 간판 카드(차양 + 가게 이름 + 답 안 한 문의) · 세 칸(문의함 · 가게 꾸미기 · QR 포스터) · 처음 설정 3단계
+   예전 첫 화면(index.html: 사장님 / 고객님 고르기)은 [예전 첫 화면으로]로 */
+.awn{height:34px;border-radius:14px 14px 0 0;background:repeating-linear-gradient(90deg,var(--teal2) 0 28px,var(--cream) 28px 56px);position:relative;box-shadow:0 3px 0 rgba(0,0,0,.08)}
+.awn::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:radial-gradient(circle at 14px 0,var(--teal2) 9px,transparent 10px) 0 0/56px 10px repeat-x,radial-gradient(circle at 42px 0,var(--cream) 9px,transparent 10px) 0 0/56px 10px repeat-x}
+.counter{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 18px 18px;padding:18px 10px 10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.counter button{position:relative;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 8px;font:inherit;font-weight:900;font-size:15.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.counter button span{font-size:12px;font-weight:700;color:var(--sub)}
+.counter button.on{background:var(--teal);border-color:var(--teal);color:#fff}.counter button.on span{color:#d6e9e6}
+.counter .n{position:absolute;top:-8px;right:-6px;font-style:normal;min-width:20px;height:20px;border-radius:10px;background:var(--coral);color:#fff;font-size:11.5px;display:grid;place-items:center;padding:0 5px}
+.todo{display:flex;align-items:center;gap:12px;background:var(--cream);border:2px solid var(--coral);border-radius:18px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.todo i{font-style:normal;font-size:30px}.todo b{display:block;font-size:17px}.todo span span{font-size:13.5px;color:var(--sub)}.todo em{margin-left:auto;font-style:normal;font-weight:900;white-space:nowrap;color:var(--coral)}
+.win{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border-radius:22px;padding:20px 18px;display:flex;flex-direction:column;gap:12px}
+.win h1{margin:0;font-size:24px;line-height:1.3;text-wrap:balance}.win p{margin:0;font-size:14.5px;opacity:.93}
+.win form{display:flex;gap:8px}.win input{flex:1;min-width:0;border:0;border-radius:14px;padding:14px;font:inherit;font-size:17px;background:#fff;color:#12302E}
+.win button{flex:none;border:0;border-radius:14px;padding:0 18px;font:inherit;font-weight:900;font-size:16px;background:var(--coral);color:#fff;cursor:pointer}
+.win .qrnote{font-size:13px;opacity:.9;display:flex;gap:8px;align-items:center}
+.li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1.5px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);font-weight:800}
+.li i{font-style:normal;color:var(--teal2);white-space:nowrap}.li .dot{background:var(--coral);color:#fff;border-radius:10px;padding:0 7px;font-size:12px;margin-left:6px}
+.desks{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory}.desks::-webkit-scrollbar{display:none}
+.sign{flex:0 0 100%;scroll-snap-align:start;min-width:0;display:flex;flex-direction:column}
+.sign .bd{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border-radius:0 0 20px 20px;padding:22px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.sign .nm{font-size:22px;font-weight:900;line-height:1.25}.sign .ct{font-size:13px;opacity:.85}
+.sign .wait{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.13);border-radius:14px;padding:10px 12px;text-decoration:none;color:#fff}
+.sign .wait b{font-size:26px}.sign .wait span{font-size:14px}.sign .wait em{margin-left:auto;font-style:normal;font-weight:900}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.three a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:80px;border-radius:14px;background:rgba(255,255,255,.13);color:#fff;font-weight:800;font-size:13.5px;text-decoration:none;text-align:center}
+.three i{font-style:normal;font-size:24px}
+.pager{display:flex;justify-content:center;gap:6px}.pager i{width:7px;height:7px;border-radius:50%;background:var(--line)}.pager i.on{background:var(--teal2)}
+.setup ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.setup li{display:flex;gap:12px;align-items:flex-start}
+.setup .k{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--tint);color:var(--teal2)}
+.setup li.done .k{background:var(--ok);color:#fff}
+.setup .t{flex:1;min-width:0}.setup .t b{display:block;font-size:15.5px}.setup .t span{font-size:13px;color:var(--sub)}
+.setup li.done .t b{text-decoration:line-through;color:var(--sub)}
+.setup li .go{flex:0 0 auto;align-self:center;border:2px solid var(--teal2);color:var(--teal2);background:none;border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;font-weight:900;cursor:pointer;text-decoration:none;white-space:nowrap}
+.setup .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.setup .bar i{display:block;height:100%;background:var(--ok)}
+.ready{background:var(--tint);border:2px solid var(--ok);border-radius:16px;padding:12px 14px;font-weight:800;font-size:14.5px;text-align:center}
+.backold{background:none;border:0;color:var(--sub);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:8px;align-self:center}
+.trybar{background:var(--tint);border-radius:12px;padding:8px 12px;font-size:12.5px;color:var(--sub);text-align:center}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="top"><a class="logo" href="home.html"><img src="icon_192.png" alt="">단골창구</a></div>
+  <div id="trybar" class="trybar" hidden></div>
+
+  <a class="todo" id="todo" hidden><i id="todoI"></i><span><b id="todoT"></b><span id="todoS"></span></span><em>보기 ›</em></a>
+
+  <div>
+    <div class="awn" aria-hidden="true"></div>
+    <div class="counter" role="tablist">
+      <button type="button" data-tab="ask" role="tab">🙋 가게에 물어보기<span>손님 · 가입 없이</span><i class="n" id="nAsk" hidden></i></button>
+      <button type="button" data-tab="shop" role="tab">🧑‍🍳 우리 가게<span>사장님</span><i class="n" id="nShop" hidden></i></button>
+    </div>
+  </div>
+
+  <!-- 손님: 가게에 물어보기 -->
+  <div id="pAsk" style="display:flex;flex-direction:column;gap:14px">
+    <section class="win">
+      <h1>가게에 바로 물어보세요</h1>
+      <p>전화번호 없이 · 가입 없이. 가게 이름이나 포스터의 6자리 코드로 찾아요.</p>
+      <form id="sf" autocomplete="off"><input id="q" type="search" maxlength="40" placeholder="가게 이름 또는 코드" aria-label="가게 이름 또는 코드"><button type="submit">찾기</button></form>
+      <div class="qrnote">📷 <span>계산대의 <b>QR을 휴대폰 카메라로 찍으면</b> 그 가게 창구가 바로 열려요.</span></div>
+    </section>
+    <section class="card"><b class="h">💬 내가 물어본 가게</b><div id="mine" style="display:flex;flex-direction:column;gap:6px"><p>불러오는 중…</p></div></section>
+  </div>
+
+  <!-- 사장님: 우리 가게 -->
+  <div id="pShop" style="display:flex;flex-direction:column;gap:14px" hidden><div id="shopBody"><p>불러오는 중…</p></div></div>
+
+  <button type="button" class="backold" id="backOld">↩ 예전 첫 화면으로</button>
+  <p class="foot">
+    <a href="features.html">📘 전체 기능 소개</a> · <a href="terms.html">이용약관</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="delete.html">계정 삭제</a><br>
+    위브앱솔루션 · 대표 이미화 · 사업자등록번호 206-08-71754 · 통신판매업신고 2022-수원권선-1701<br>
+    경기도 수원시 권선구 수성로47 10동 501호 · weapps.kr@gmail.com
+  </p>
+</div>
+<script src="dangol_home_mode.js?v=20261122a"></script>
+<script>
+(async function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); };
+  function store(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  try { if (/[?&]try=1/.test(location.search)) { store('dangol_home_mode', 'new'); history.replaceState(null, '', 'home.html'); } } catch (e) {}
+  if (store('dangol_home_mode') === 'new' && (window.DANGOL_HOME_ALL || 'classic') !== 'new') { $('trybar').hidden = false; $('trybar').textContent = '시험 중 — 이 폰만 새 첫 화면입니다'; }
+  $('backOld').onclick = function(){ store('dangol_home_mode', 'classic'); location.replace('index.html'); };
+
+  var sb = window.supabase.createClient('https://qmwaraittiurkynszjts.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y');
+  async function rpc(fn, a){ var r = await sb.rpc(fn, a || {}); if (r.error) throw r.error; return r.data; }
+  function when(t){ var k = new Date(new Date(t).getTime() + 9 * 3600e3); return (k.getUTCMonth() + 1) + '/' + k.getUTCDate(); }
+
+  /* ── 두 갈래 ── */
+  function tab(t){
+    [].forEach.call(document.querySelectorAll('.counter button'), function(b){ b.classList.toggle('on', b.dataset.tab === t); b.setAttribute('aria-selected', b.dataset.tab === t); });
+    $('pAsk').hidden = t !== 'ask'; $('pShop').hidden = t !== 'shop'; store('dangol_home_tab', t);
+  }
+  [].forEach.call(document.querySelectorAll('.counter button'), function(b){ b.onclick = function(){ tab(b.dataset.tab); }; });
+
+  /* ── 손님: 찾기 · 내가 물어본 가게 ── */
+  $('sf').onsubmit = function(e){ e.preventDefault(); var q = $('q').value.trim(); if (q.length < 2) { $('q').focus(); return; }
+    location.href = /^[A-Za-z0-9]{6}$/.test(q) ? 'dangol.html?c=' + encodeURIComponent(q.toUpperCase()) : 'dangol.html?q=' + encodeURIComponent(q); };
+  var replies = 0, gTok = store('dangol_token');
+  if (gTok && gTok.length >= 24) {
+    try {
+      var ts = await rpc('dg_guest_threads', { p_token: gTok });
+      replies = ts.reduce(function(a, t){ return a + (t.unread ? 1 : 0); }, 0);
+      $('mine').innerHTML = ts.length ? ts.map(function(t){
+        var ad = String(t.address || t.region || '').split(' ').slice(0, 3).join(' ');
+        return '<a class="li" href="dangol.html?c=' + encodeURIComponent(t.code) + '&t=' + t.id + '"><span>🏪 ' + esc(t.name) + (t.unread ? '<b class="dot">' + t.unread + '</b>' : '') +
+          (ad ? '<small style="display:block;font-weight:600;opacity:.75">' + esc(ad) + '</small>' : '') + '</span><i>' + (t.unread ? '답장 왔어요' : when(t.updated_at)) + ' ›</i></a>'; }).join('')
+        : '<p>아직 물어본 가게가 없어요. 가게 QR을 찍어 물어보면 여기에 남아요.</p>';
+    } catch (e) { $('mine').innerHTML = '<p>불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>'; }
+  } else $('mine').innerHTML = '<p>아직 물어본 가게가 없어요. 가게 QR을 찍어 물어보면 여기에 남아요.</p>';
+  if (replies) { $('nAsk').hidden = false; $('nAsk').textContent = replies; }
+
+  /* ── 사장님: 우리 가게 ── */
+  var body = $('shopBody'), unread = 0, firstWithUnread = null;
+  var steps = '<section class="card setup"><b class="h">이렇게 3단계면 끝</b><ol>' +
+    '<li><span class="k">1</span><span class="t"><b>가게 사진 · 소개 올리기</b><span>사업자등록증 · 전화번호 필요 없어요</span></span></li>' +
+    '<li><span class="k">2</span><span class="t"><b>QR 포스터를 계산대에</b><span>인쇄해서 손님 눈에 띄는 곳에</span></span></li>' +
+    '<li><span class="k">3</span><span class="t"><b>시험 문의 보내 보기</b><span>손님처럼 한 번 물어보고, 내 폰에 알림이 오는지 확인</span></span></li></ol></section>';
+  var ses = null; try { ses = (await sb.auth.getSession()).data.session; } catch (e) {}
+  var owner = ses && ses.user && !ses.user.is_anonymous;
+  var desks = [];
+  if (!owner) {
+    body.innerHTML = '<section class="card"><b class="h">우리 가게 문의 창구, 오늘 바로 여세요</b>' +
+      '<p>가게 사진과 짧은 소개만 올리면 끝. 손님은 계산대의 QR을 찍고 앱 설치 없이 사장님께 묻습니다. 사장님 번호는 드러나지 않아요.</p>' +
+      '<div class="price"><b>1년 9,900원</b><span>· 처음 30일 무료</span></div>' +
+      '<a class="btn c" href="login.html">우리 가게 단골창구 열기 — 30일 무료</a><a class="btn g" href="login.html">이미 계정이 있어요 · 로그인</a></section>' + steps;
+  } else {
+    try { desks = await rpc('dg_owner_desks'); } catch (e) { desks = null; }
+    if (!desks) body.innerHTML = '<div class="card"><b class="h">가게 정보를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</b></div>';
+    else if (!desks.length) body.innerHTML = '<section class="card"><b class="h">첫 단골창구를 여세요</b><p>가게 이름 · 업종 · 주소를 넣으면 바로 열려요. 처음 30일 무료.</p><a class="btn c" href="dangol_owner.html">우리 가게 열기</a></section>' + steps;
+    else {
+      desks.forEach(function(d){ unread += +d.unread || 0; if (!firstWithUnread && +d.unread) firstWithUnread = d; });
+      var html = '<div class="desks" id="desks">' + desks.map(function(d){
+        var days = Math.ceil((new Date(d.until) - new Date()) / 864e5), w = +d.unread || 0, open = +d.waiting || 0;
+        var state = d.status === 'suspended' ? '⛔ 잠시 멈춤 — 고객센터에 문의해 주세요' : days <= 0 ? '⏸ 기간이 끝나 쉬는 중 — 연장하면 바로 열려요' : days <= 14 ? '⏳ ' + days + '일 남음 — 연장해 주세요' : '🟢 문의 받는 중';
+        return '<div class="sign"><div class="awn" aria-hidden="true"></div><div class="bd">' +
+          '<div><div class="nm">' + esc(d.name) + (d.verified ? ' ✅' : '') + '</div><div class="ct">' + esc(d.category || '') + ' · ' + state + '</div></div>' +
+          '<a class="wait" href="dangol_owner.html?d=' + encodeURIComponent(d.id) + '"><b>' + w + '</b><span>' + (w ? '새 문의 · 답을 기다려요' : '새 문의 없음') + (open ? '<br><small style="opacity:.8">진행 중인 대화 ' + open + '건</small>' : '') + '</span><em>문의함 ›</em></a>' +
+          '<div class="three">' +
+            '<a href="dangol_owner.html?d=' + encodeURIComponent(d.id) + '"><i>💬</i>문의함</a>' +
+            '<a href="dangol_owner.html?d=' + encodeURIComponent(d.id) + '&tab=set"><i>🛠</i>가게 꾸미기</a>' +
+            '<a href="dangol_poster.html?c=' + encodeURIComponent(d.code) + '&n=' + encodeURIComponent(d.name) + '" target="_blank" rel="noopener"><i>🖨</i>QR 포스터</a>' +
+          '</div></div></div>'; }).join('') + '</div>' +
+        (desks.length > 1 ? '<div class="pager" id="pager">' + desks.map(function(_, i){ return '<i class="' + (i ? '' : 'on') + '"></i>'; }).join('') + '</div>' : '');
+      /* 처음 설정 3단계 (첫 가게) */
+      var d0 = desks[0], kP = 'dg_setup_poster_' + d0.id, kT = 'dg_setup_test_' + d0.id;
+      var s1 = !!(d0.photo && d0.intro), s2 = store(kP) === '1', s3 = store(kT) === '1', n = [s1, s2, s3].filter(Boolean).length;
+      if (n < 3) {
+        html += '<section class="card setup"><div style="display:flex;justify-content:space-between;align-items:center"><b class="h">처음 설정 ' + n + ' / 3</b><span style="font-size:13px;color:var(--sub)">' + esc(d0.name) + '</span></div>' +
+          '<div class="bar"><i style="width:' + Math.round(n / 3 * 100) + '%"></i></div><ol>' +
+          '<li class="' + (s1 ? 'done' : '') + '"><span class="k">' + (s1 ? '✓' : '1') + '</span><span class="t"><b>가게 사진 · 소개 올리기</b><span>자주 묻는 질문(영업시간 · 주차)도 적으면 손님 화면에서 먼저 답해요</span></span>' +
+            (s1 ? '' : '<a class="go" href="dangol_owner.html?d=' + encodeURIComponent(d0.id) + '&tab=set">꾸미기</a>') + '</li>' +
+          '<li class="' + (s2 ? 'done' : '') + '"><span class="k">' + (s2 ? '✓' : '2') + '</span><span class="t"><b>QR 포스터를 계산대에</b><span>인쇄해서 손님 눈에 띄는 곳에 붙이세요</span></span>' +
+            (s2 ? '' : '<button class="go" type="button" id="sP">붙였어요</button>') + '</li>' +
+          '<li class="' + (s3 ? 'done' : '') + '"><span class="k">' + (s3 ? '✓' : '3') + '</span><span class="t"><b>시험 문의 보내 보기</b><span>손님처럼 한 번 물어보고, 내 폰에 알림이 오는지 확인</span></span>' +
+            (s3 ? '' : '<a class="go" id="sT" href="dangol.html?c=' + encodeURIComponent(d0.code) + '">보내 보기</a>') + '</li></ol></section>';
+      } else html += '<div class="ready">✓ 준비 끝! 손님이 ' + esc(d0.name) + ' 창구에 물어보면 알림으로 받아요</div>';
+      html += '<a class="btn g" href="dangol_owner.html?new=1">＋ 가게 한 곳 더 열기 (3곳까지)</a>';
+      body.innerHTML = html;
+      var sp = $('sP'); if (sp) sp.onclick = function(){ store(kP, '1'); location.reload(); };
+      var st = $('sT'); if (st) st.onclick = function(){ store(kT, '1'); };
+      var ds = $('desks'), pg = $('pager');
+      if (ds && pg) ds.addEventListener('scroll', function(){ var i = Math.round(ds.scrollLeft / ds.clientWidth); [].forEach.call(pg.children, function(x, j){ x.classList.toggle('on', i === j); }); }, { passive: true });
+    }
+  }
+  if (unread) { $('nShop').hidden = false; $('nShop').textContent = unread > 99 ? '99+' : unread; }
+
+  /* ── 지금 할 일 ── */
+  var td = $('todo');
+  if (unread) { td.hidden = false; td.href = 'dangol_owner.html?d=' + encodeURIComponent(firstWithUnread.id); $('todoI').textContent = '🧑‍🍳';
+    $('todoT').textContent = '사장님, 새 문의 ' + unread + '건'; $('todoS').textContent = '손님이 답을 기다리고 있어요 — ' + firstWithUnread.name; }
+  else if (replies) { td.hidden = false; td.href = 'javascript:void(0)'; td.onclick = function(){ tab('ask'); $('mine').scrollIntoView({ behavior: 'smooth' }); };
+    $('todoI').textContent = '💬'; $('todoT').textContent = '가게에서 답장이 왔어요 (' + replies + '곳)'; $('todoS').textContent = '아래 「내가 물어본 가게」에서 확인하세요'; }
+
+  /* 처음 칸: 새 문의가 있으면 우리 가게 · 답장이 왔으면 물어보기 · 아니면 지난번 · 사장님 계정이면 우리 가게 */
+  var t0 = unread ? 'shop' : replies ? 'ask' : (store('dangol_home_tab') || (owner ? 'shop' : 'ask'));
+  tab(t0);
+})();
+</script>
+<script>/* 🌗 주야간 바꾸기 단추 — 다른 화면과 같음 */
+(function(){ var R = document.documentElement;
+  function dark(){ var t = R.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
+  var b = document.createElement('button'); b.type = 'button'; b.id = 'dgTheme';
+  b.style.cssText = 'flex:none;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line,#DCE3DE);background:var(--card,#fff);color:var(--ink,#12302E);font-size:18px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)';
+  function paint(){ var d = dark(); b.textContent = d ? '☀️' : '🌙'; b.title = b.ariaLabel = d ? '주간 모드로' : '야간 모드로'; }
+  b.onclick = function(){ var t = dark() ? 'light' : 'dark'; R.setAttribute('data-theme', t); try { localStorage.setItem('dg_theme', t); } catch (e) {} paint(); };
+  paint(); var top = document.querySelector('.top'); if (top) { b.style.marginLeft = 'auto'; top.appendChild(b); }
+})();
+</script>
+</body>
+</html>
