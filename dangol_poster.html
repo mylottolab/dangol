@@ -32,11 +32,11 @@ body{ margin:0; background:#E9EEEC; font-family:system-ui,-apple-system,'Apple S
 .foot b{ color:#123F3D; }
 /* 📱 2026-11-16 휴대폰 — A4(210mm) 포스터를 화면 폭에 맞춰 줄여서 보여 줍니다(인쇄는 그대로 A4) */
 @media screen{ html,body{ overflow-x:hidden; } .page{ zoom:var(--z,1); } }
-@media print{ body{ background:#fff; } .bar,.tip{ display:none; } .page{ margin:0; box-shadow:none; zoom:1 !important; } }
+@media print{ body{ background:#fff; } .bar,.tip,.homebar{ display:none !important; } .page{ margin:0; box-shadow:none; zoom:1 !important; } }
 </style>
 </head>
 <body>
-<div class="bar"><button type="button" id="print">🖨 인쇄하기 (A4)</button><button type="button" class="ghost" id="copy">주소 복사</button></div>
+<div class="bar"><button type="button" class="ghost" id="dgBack" style="flex:0 0 auto" aria-label="뒤로">‹ 뒤로</button><button type="button" id="print">🖨 인쇄하기 (A4)</button><button type="button" class="ghost" id="copy">주소 복사</button></div>
 <p class="tip">PC에서 인쇄하면 가장 깨끗합니다. 인쇄 창에서 <b>용지 A4 · 여백 없음 · 「배경 그래픽」 켜기</b>를 고르세요. 휴대폰에서는 [인쇄 → PDF로 저장] 뒤 가까운 인쇄소에 맡기셔도 됩니다.</p>
 <div class="page">
   <div class="top"><span class="tag">🏪 단골창구</span><h1 id="name">우리 가게</h1></div>
@@ -62,6 +62,14 @@ body{ margin:0; background:#E9EEEC; font-family:system-ui,-apple-system,'Apple S
   document.getElementById('copy').onclick = function(){
     var t = this; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function(){ t.textContent = '복사됨 ✓'; }, function(){ prompt('주소', url); });
   };
+})();
+</script>
+<script>/* 🏪 2026-11-22 뒤로 · 처음으로 — 앱에서는 새 창이 아니라 같은 화면으로 열려 돌아갈 길이 필요합니다 */
+(function(){ var b = document.getElementById('dgBack'); if (!b) return;
+  b.onclick = function(){ if (history.length > 1) history.back(); else location.href = 'home.html'; };
+  var h = document.createElement('a'); h.className = 'homebar'; h.href = 'home.html'; h.textContent = '🏪 단골창구 처음으로';
+  h.style.cssText = 'display:block;text-align:center;margin:18px auto 30px;font-weight:800;color:#1F6F6B;text-decoration:underline;font-size:15px';
+  document.body.appendChild(h);
 })();
 </script>
 </body>

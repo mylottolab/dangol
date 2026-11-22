@@ -303,7 +303,7 @@ function main(){
     (DESKS.length > 1 ? '<select id="pick">' + DESKS.map(function(x){ return '<option value="' + x.id + '"' + (x.id === d.id ? ' selected' : '') + '>' + esc(x.name) + (x.unread ? ' (' + x.unread + ')' : '') + '</option>'; }).join('') + '</select>' : '') +
     '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' + st + '<span style="font-size:14px;color:var(--sub)">' + day(d.until) + '까지</span></div>' +
       '<div>가게 코드 <span class="code">' + esc(d.code) + '</span></div>' +
-      '<div class="row"><a class="btn" target="_blank" rel="noopener" href="dangol_poster.html?c=' + encodeURIComponent(d.code) + '&n=' + encodeURIComponent(d.name) + '">🖨 QR 포스터</a><button class="btn g" id="cp" type="button">주소 복사</button><a class="btn g" target="_blank" rel="noopener" href="' + link + '">손님 화면 보기</a></div>' +
+      '<div class="row"><a class="btn" href="dangol_poster.html?c=' + encodeURIComponent(d.code) + '&n=' + encodeURIComponent(d.name) + '">🖨 QR 포스터</a><button class="btn g" id="cp" type="button">주소 복사</button><a class="btn g" target="_blank" rel="noopener" href="' + link + '">손님 화면 보기</a></div>' +
       '<div style="font-size:14.5px">요금제 <b>' + planName(live ? d.plan : 'basic') + '</b>' + (live && d.plan !== 'basic' ? ' — ' + esc(PLANS[d.plan].f.replace(/^[^+]*\+ /, '')) : '') + '</div>' +
       '<button class="btn c" id="ext" type="button">💳 요금제 · 연장' + (live && d.plan === 'basic' ? ' (사진 · 통화 추가)' : '') + '</button>' +
       '<div id="planBox" class="card" hidden style="padding:12px;border-style:dashed"></div>' + useBox(d) +
