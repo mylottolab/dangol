@@ -62,6 +62,7 @@
 <script>
 (function(){ try {
   var sb = window.supabase.createClient('https://qmwaraittiurkynszjts.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y');
+  try { setTimeout(function(){ sb.rpc('weave_log_access', { p_app: 'dangol' }).then(function(){}, function(){}); }, 2500); } catch (e) {}   /* 🛡 접속 기록(3개월 보관) — weave_safety.sql */
   sb.auth.getSession().then(function(r){ var x = r.data.session; if (x && x.user && !x.user.is_anonymous) location.replace('dangol_owner.html'); });
 } catch (e) {} })();
 </script>
