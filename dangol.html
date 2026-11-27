@@ -91,7 +91,7 @@ summary::before{ content:'Q '; color:var(--coral); }
 var URL0 = 'https://qmwaraittiurkynszjts.supabase.co';
 var KEY0 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y';
 var sb = window.supabase.createClient(URL0, KEY0, { auth: { persistSession: false, storageKey: 'dangol-guest' } });
-try { setTimeout(function(){ sb.rpc('weave_log_access', { p_app: 'dangol-guest' }).then(function(){}, function(){}); }, 2500); } catch (e) {}   /* 🛡 접속 기록(3개월 보관) — weave_safety.sql */
+try { setTimeout(function(){ sb.rpc('weave_log_access', { p_app: 'dangol-guest', p_dev: (function(){ try { var k = 'weave_dev', v = localStorage.getItem(k); if (!v) { v = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now().toString(36) + Math.random().toString(36).slice(2)); localStorage.setItem(k, v); } return v; } catch (e) { return null; } })() }).then(function(){}, function(){}); }, 2500); } catch (e) {}   /* 🛡 접속 기록(3개월 보관) — weave_safety.sql */
 var A = document.getElementById('app'), Q = new URLSearchParams(location.search), poll = null;
 /* 🔴 2026-11-15 사장님 개설 안내 — 결제는 가림콜(aliascall.com · 가림콜 앱)에서만.
    부름 · 누름 · 바로너 앱 안에서는 값 · 결제 링크를 보이지 않습니다(그 앱의 결제 창구는 다른 상품용 · 스토어 규칙). */

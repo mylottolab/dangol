@@ -77,7 +77,7 @@ textarea{ min-height:80px; resize:vertical; }
 var URL0 = 'https://qmwaraittiurkynszjts.supabase.co';
 var KEY0 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtd2FyYWl0dGl1cmt5bnN6anRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3ODQ5OTUsImV4cCI6MjEwMjM2MDk5NX0.9Qr2vFzDCSKS54N6C5QN44BvCzIPTMQyVz7nX3GqT9Y';
 var sb = window.sb = window.supabase.createClient(URL0, KEY0);
-try { setTimeout(function(){ sb.rpc('weave_log_access', { p_app: 'dangol' }).then(function(){}, function(){}); }, 2500); } catch (e) {}   /* 🛡 접속 기록(3개월 보관) — weave_safety.sql */   // aliascall_push.js 가 전역 sb 를 씁니다(앱 알림 등록 · 알림 눌러 들어오기)
+try { setTimeout(function(){ sb.rpc('weave_log_access', { p_app: 'dangol', p_dev: (function(){ try { var k = 'weave_dev', v = localStorage.getItem(k); if (!v) { v = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now().toString(36) + Math.random().toString(36).slice(2)); localStorage.setItem(k, v); } return v; } catch (e) { return null; } })() }).then(function(){}, function(){}); }, 2500); } catch (e) {}   /* 🛡 접속 기록(3개월 보관) — weave_safety.sql */   // aliascall_push.js 가 전역 sb 를 씁니다(앱 알림 등록 · 알림 눌러 들어오기)
 var A = document.getElementById('app'), Q = new URLSearchParams(location.search);
 var DGHOST = /(^|\.)dangol\.org$/.test(location.hostname);   // 🏪 단골창구 독립 사이트 · 앱(dangol.org) — 같은 파일을 aliascall.com 과 함께 씁니다
 var BRAND = DGHOST ? '단골창구' : '가림콜';
