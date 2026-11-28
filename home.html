@@ -144,12 +144,12 @@
   if (!owner) {
     body.innerHTML = '<section class="card"><b class="h">우리 가게 문의 창구, 오늘 바로 여세요</b>' +
       '<p>가게 사진과 짧은 소개만 올리면 끝. 손님은 계산대의 QR을 찍고 앱 설치 없이 사장님께 묻습니다. 사장님 번호는 드러나지 않아요.</p>' +
-      '<div class="price"><b>1년 9,900원</b><span>· 처음 30일 무료</span></div>' +
-      '<a class="btn c" href="login.html">우리 가게 단골창구 열기 — 30일 무료</a><a class="btn g" href="login.html">이미 계정이 있어요 · 로그인</a></section>' + steps;
+      '<div class="price"><b>1년 9,900원</b><span>· 처음 7일 무료</span></div>' +
+      '<a class="btn c" href="login.html">우리 가게 단골창구 열기 — 7일 무료</a><a class="btn g" href="login.html">이미 계정이 있어요 · 로그인</a></section>' + steps;
   } else {
     try { desks = await rpc('dg_owner_desks'); } catch (e) { desks = null; }
     if (!desks) body.innerHTML = '<div class="card"><b class="h">가게 정보를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</b></div>';
-    else if (!desks.length) body.innerHTML = '<section class="card"><b class="h">첫 단골창구를 여세요</b><p>가게 이름 · 업종 · 주소를 넣으면 바로 열려요. 처음 30일 무료.</p><a class="btn c" href="dangol_owner.html">우리 가게 열기</a></section>' + steps;
+    else if (!desks.length) body.innerHTML = '<section class="card"><b class="h">첫 단골창구를 여세요</b><p>가게 이름 · 업종 · 주소를 넣으면 바로 열려요. 처음 7일 무료.</p><a class="btn c" href="dangol_owner.html">우리 가게 열기</a></section>' + steps;
     else {
       desks.forEach(function(d){ unread += +d.unread || 0; if (!firstWithUnread && +d.unread) firstWithUnread = d; });
       var html = '<div class="desks" id="desks">' + desks.map(function(d){
